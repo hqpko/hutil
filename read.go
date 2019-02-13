@@ -1,4 +1,4 @@
-package hutil
+package hutils
 
 import (
 	"encoding/json"
