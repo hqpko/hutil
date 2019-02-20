@@ -9,12 +9,7 @@ import (
 )
 
 func ReadFile(fpath string) ([]byte, error) {
-	f, e := os.Open(fpath)
-	if e != nil {
-		return nil, e
-	}
-	defer f.Close()
-	return ioutil.ReadAll(f)
+	return ioutil.ReadFile(fpath)
 }
 
 func ReadJson(fpath string, i interface{}) error {
@@ -30,14 +25,8 @@ func ReadToml(fpath string, i interface{}) error {
 	return e
 }
 
-func WriteBytes(fpath string, bs []byte) error {
-	f, e := os.OpenFile(fpath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.ModePerm)
-	if e != nil {
-		return e
-	}
-	defer f.Close()
-	_, e = f.Write(bs)
-	return e
+func WriteBytes(fpath string, data []byte) error {
+	return ioutil.WriteFile(fpath, data, os.ModePerm)
 }
 
 func WriteJson(fpath string, i interface{}) error {
