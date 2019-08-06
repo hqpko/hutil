@@ -1,10 +1,17 @@
 package hutils
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 const strBase = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 var strMaxLen = len(strBase)
+
+func InitRandSeed() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func RandString(n int) string {
 	buf := make([]byte, n)
