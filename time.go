@@ -40,3 +40,14 @@ func (t *TimeUtil) Add(duration time.Duration) {
 func Now() time.Time {
 	return DefTimeUtil.Now()
 }
+
+func Wait(timeout, step time.Duration, f func() bool) bool {
+	for timeout > 0 {
+		if f() {
+			return true
+		}
+		time.Sleep(step)
+		timeout -= step
+	}
+	return false
+}
