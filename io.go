@@ -4,25 +4,14 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-
-	"github.com/BurntSushi/toml"
 )
 
-func ReadFile(fpath string) ([]byte, error) {
-	return ioutil.ReadFile(fpath)
-}
-
 func ReadJson(fpath string, i interface{}) error {
-	d, e := ReadFile(fpath)
+	d, e := ioutil.ReadFile(fpath)
 	if e != nil {
 		return e
 	}
 	return json.Unmarshal(d, i)
-}
-
-func ReadToml(fpath string, i interface{}) error {
-	_, e := toml.DecodeFile(fpath, i)
-	return e
 }
 
 func WriteBytes(fpath string, data []byte) error {
