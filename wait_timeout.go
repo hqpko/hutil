@@ -16,17 +16,23 @@ func NewWaitTimeout() *WaitTimeout {
 	return &WaitTimeout{done: make(chan struct{})}
 }
 
-// Wait, if timeout, return false
-func (wt *WaitTimeout) Wait(timeout time.Duration) bool {
+// Wait, 等待过程外置，外部使用时，可以先获取 chan, 在释放完可能存在的锁后，进入 <-chan 环节，避免等待时间内持有锁
+func (wt *WaitTimeout) Wait(timeout time.Duration) chan bool {
+	c := make(chan bool, 1)
 	if count := atomic.LoadInt32(&wt.count); count <= 0 {
-		return true
+		c <- true
+	} else {
+		go wt.wait(timeout, c)
 	}
+	return c
+}
 
+func (wt *WaitTimeout) wait(timeout time.Duration, c chan bool) {
 	select {
 	case <-wt.done:
-		return true
+		c <- true
 	case <-time.After(timeout):
-		return false
+		c <- false
 	}
 }
 
@@ -50,5 +56,5 @@ func WaitTimeoutFunc(timeout time.Duration, f func()) bool {
 		f()
 		wt.Done()
 	}()
-	return wt.Wait(timeout)
+	return <-wt.Wait(timeout)
 }

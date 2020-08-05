@@ -11,7 +11,7 @@ func TestWaitTimout(t *testing.T) {
 	go func() {
 		wt.Done()
 	}()
-	if !wt.Wait(100 * time.Millisecond) { // true
+	if success := <-wt.Wait(100 * time.Millisecond); !success { // true
 		t.Errorf("waitTimeout.Wait fail")
 	}
 
@@ -21,7 +21,7 @@ func TestWaitTimout(t *testing.T) {
 		time.Sleep(200 * time.Millisecond)
 		wt.Done()
 	}()
-	if wt.Wait(100 * time.Millisecond) { // false
+	if success := <-wt.Wait(100 * time.Millisecond); success { // false
 		t.Errorf("waitTimeout.Wait fail")
 	}
 }

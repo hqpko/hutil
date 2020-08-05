@@ -8,7 +8,7 @@ import (
 func TestWatcher(t *testing.T) {
 	w := NewWatcher()
 	go w.Notify()
-	if !w.Watch(100 * time.Millisecond) {
+	if success := <-w.Watch(100 * time.Millisecond); !success {
 		t.Errorf("watcher.watch fail")
 	}
 
@@ -16,7 +16,7 @@ func TestWatcher(t *testing.T) {
 		time.Sleep(200 * time.Millisecond)
 		w.Notify()
 	}()
-	if w.Watch(100 * time.Millisecond) {
+	if success := <-w.Watch(100 * time.Millisecond); success {
 		t.Errorf("watcher.watch fail")
 	}
 }

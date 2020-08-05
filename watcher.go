@@ -14,7 +14,7 @@ func NewWatcher() *Watcher {
 	return &Watcher{waits: []*WaitTimeout{}}
 }
 
-func (w *Watcher) Watch(timeout time.Duration) bool {
+func (w *Watcher) Watch(timeout time.Duration) chan bool {
 	waiter := NewWaitTimeout().Add(1)
 	w.addWaiter(waiter)
 	return waiter.Wait(timeout)
