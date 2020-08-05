@@ -43,3 +43,12 @@ func (wt *WaitTimeout) Done() {
 		}
 	}
 }
+
+func WaitTimeoutFunc(timeout time.Duration, f func()) bool {
+	wt := NewWaitTimeout().Add(1)
+	go func() {
+		f()
+		wt.Done()
+	}()
+	return wt.Wait(timeout)
+}
