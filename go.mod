@@ -1,5 +1,5 @@
 module github.com/hqpko/hutils
 
-go 1.12
+go 1.14
 
-require github.com/hqpko/hbuffer v0.2.3
+require github.com/hqpko/hbuffer v0.3.3
