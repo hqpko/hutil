@@ -1,6 +1,7 @@
 package hutils
 
 import (
+	"runtime"
 	"sync/atomic"
 	"time"
 )
@@ -55,4 +56,16 @@ func WaitTimeoutFunc(timeout time.Duration, f func()) bool {
 		wt.Done()
 	}()
 	return <-wt.Wait(timeout)
+}
+
+func WaitUntil(timeout time.Duration, f func() bool) bool {
+	start := time.Now()
+	for {
+		if f() {
+			return true
+		} else if time.Now().Sub(start) > timeout {
+			return false
+		}
+		runtime.Gosched()
+	}
 }
