@@ -11,3 +11,9 @@ func Recover() {
 		debug.PrintStack()
 	}
 }
+
+func RecoverF(f func(r interface{})) {
+	if r := recover(); r != nil {
+		f(r)
+	}
+}
