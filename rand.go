@@ -1,7 +1,6 @@
 package hutils
 
 import (
-	"cmp"
 	"math/rand/v2"
 )
 
@@ -32,10 +31,18 @@ func RandSlice[T any](slice []T, n int) []T {
 	return r
 }
 
-func RandMap[T cmp.Ordered, U any](m map[T]U, n int) []T {
-	keys := make([]T, 0, len(m))
+func RandMapK[K comparable, V any](m map[K]V, n int) []K {
+	keys := make([]K, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
 	}
 	return RandSlice(keys, n)
+}
+
+func RandMapV[K comparable, V any](m map[K]V, n int) []V {
+	values := make([]V, 0, len(m))
+	for _, v := range m {
+		values = append(values, v)
+	}
+	return RandSlice(values, n)
 }
