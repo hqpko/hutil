@@ -42,3 +42,19 @@ func MapToSlice[K comparable, V, T any](m map[K]V, filterFunc func(K, V) (T, boo
 	}
 	return a
 }
+
+func MapToSliceK[K comparable, V any](m map[K]V) []K {
+	a := make([]K, 0, len(m))
+	for k := range m {
+		a = append(a, k)
+	}
+	return a
+}
+
+func MapToSliceV[K comparable, V any](m map[K]V) []V {
+	a := make([]V, 0, len(m))
+	for _, v := range m {
+		a = append(a, v)
+	}
+	return a
+}
