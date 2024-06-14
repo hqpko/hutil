@@ -23,20 +23,30 @@ func TopMapN[K comparable, V any](m map[K]V, n int, less func(V, V) bool) []V {
 	return a[:n]
 }
 
-func SliceToMap[K comparable, V any](a []V, keyFunc func(V) (K, bool)) map[K]V {
-	m := make(map[K]V, len(a))
+func SliceToMap[K comparable, V, T any](a []V, transFunc func(V) (K, T, bool)) map[K]T {
+	m := make(map[K]T, len(a))
 	for _, v := range a {
-		if k, ok := keyFunc(v); ok {
-			m[k] = v
+		if k, t, ok := transFunc(v); ok {
+			m[k] = t
 		}
 	}
 	return m
 }
 
-func MapToSlice[K comparable, V, T any](m map[K]V, filterFunc func(K, V) (T, bool)) []T {
+func SliceToSlice[T, V any](a []T, transFunc func(T) (V, bool)) []V {
+	b := make([]V, 0, len(a))
+	for _, v := range a {
+		if r, ok := transFunc(v); ok {
+			b = append(b, r)
+		}
+	}
+	return b
+}
+
+func MapToSlice[K comparable, V, T any](m map[K]V, transFunc func(K, V) (T, bool)) []T {
 	a := make([]T, 0, len(m))
 	for k, v := range m {
-		if t, ok := filterFunc(k, v); ok {
+		if t, ok := transFunc(k, v); ok {
 			a = append(a, t)
 		}
 	}
