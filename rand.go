@@ -1,6 +1,7 @@
 package hutils
 
 import (
+	"cmp"
 	"math/rand/v2"
 	"sort"
 )
@@ -19,9 +20,7 @@ func RandString(n int) string {
 
 func RandSlice[T any](slice []T, n int) []T {
 	l := len(slice)
-	if n > l {
-		n = l
-	}
+	n = Clamp(n, 0, l)
 	r := make([]T, n)
 	for i := 0; i < n; i++ {
 		j := rand.IntN(l)
@@ -88,4 +87,14 @@ func RandSliceWeightFuncN[T any](slice []T, n int, weightFunc func(T) int) []T {
 		selectedItems = append(selectedItems, slice[idx])
 	}
 	return selectedItems
+}
+
+func Clamp[T cmp.Ordered](v, min, max T) T {
+	if v < min {
+		return min
+	}
+	if v > max {
+		return max
+	}
+	return v
 }
